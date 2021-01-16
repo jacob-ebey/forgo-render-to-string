@@ -1,4 +1,4 @@
-import { VNode } from 'preact';
+import { ForgoNode } from 'forgo';
 
 interface Options {
 	shallow?: boolean;
@@ -6,11 +6,7 @@ interface Options {
 	pretty?: boolean | string;
 }
 
-export function render(vnode: VNode, context?: any, options?: Options): string;
-export function renderToString(
-	vnode: VNode,
-	context?: any,
-	options?: Options
-): string;
-export function shallowRender(vnode: VNode, context?: any): string;
+export function render(vnode: ForgoNode, options?: Options): string;
+export function renderToString(vnode: ForgoNode, options?: Options): string;
+export function shallowRender(vnode: ForgoNode, options?: Options): string;
 export default render;

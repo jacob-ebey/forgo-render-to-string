@@ -4,7 +4,7 @@ import { indent, encodeEntities, assign } from './util';
 import prettyFormat from 'pretty-format';
 
 // we have to patch in Array support, Possible issue in npm.im/pretty-format
-let preactPlugin = {
+let forgoPlugin = {
 	test(object) {
 		return (
 			object &&
@@ -15,15 +15,15 @@ let preactPlugin = {
 		);
 	},
 	print(val, print, indent) {
-		return renderToString(val, preactPlugin.context, preactPlugin.opts, true);
+		return renderToString(val, forgoPlugin.opts, true);
 	}
 };
 
 let prettyFormatOpts = {
-	plugins: [preactPlugin]
+	plugins: [forgoPlugin]
 };
 
-function attributeHook(name, value, context, opts, isComponent) {
+function attributeHook(name, value, opts, isComponent) {
 	let type = typeof value;
 
 	// Use render-to-string's built-in handling for these properties
@@ -45,8 +45,7 @@ function attributeHook(name, value, context, opts, isComponent) {
 		if (type === 'function' && !opts.functionNames) {
 			value = 'Function';
 		} else {
-			preactPlugin.context = context;
-			preactPlugin.opts = opts;
+			forgoPlugin.opts = opts;
 			value = prettyFormat(value, prettyFormatOpts);
 			if (~value.indexOf('\n')) {
 				value = `${indent('\n' + value, indentChar)}\n`;
@@ -67,9 +66,9 @@ let defaultOpts = {
 	pretty: '  '
 };
 
-function renderToJsxString(vnode, context, opts, inner) {
+function renderToJsxString(vnode, opts, inner) {
 	opts = assign(assign({}, defaultOpts), opts || {});
-	return renderToString(vnode, context, opts, inner);
+	return renderToString(vnode, opts, inner);
 }
 
 export default renderToJsxString;

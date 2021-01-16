@@ -1,13 +1,12 @@
 import { render as basicRender } from '../src';
 import { render } from '../src/jsx';
-import { h, Fragment } from 'preact';
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 import { dedent } from './jsx';
 chai.use(sinonChai);
 
 describe('pretty', () => {
-	let prettyRender = (jsx) => render(jsx, {}, { pretty: true });
+	let prettyRender = (jsx) => render(jsx, { pretty: true });
 
 	it('should render no whitespace by default', () => {
 		let rendered = basicRender(
@@ -77,46 +76,46 @@ describe('pretty', () => {
 		).to.equal(`<div>\n\t<span></span>\n</div>`);
 	});
 
-	it('should not increase indentation with Fragments', () => {
-		expect(
-			prettyRender(
-				<div>
-					<Fragment>
-						<span />
-					</Fragment>
-				</div>
-			)
-		).to.equal(`<div>\n\t<span></span>\n</div>`);
-	});
+	// it('should not increase indentation with Fragments', () => {
+	// 	expect(
+	// 		prettyRender(
+	// 			<div>
+	// 				<Fragment>
+	// 					<span />
+	// 				</Fragment>
+	// 			</div>
+	// 		)
+	// 	).to.equal(`<div>\n\t<span></span>\n</div>`);
+	// });
 
-	it('should not increase indentation with nested Fragments', () => {
-		expect(
-			prettyRender(
-				<div>
-					<Fragment>
-						<Fragment>
-							<span />
-						</Fragment>
-					</Fragment>
-				</div>
-			)
-		).to.equal(`<div>\n\t<span></span>\n</div>`);
-	});
+	// it('should not increase indentation with nested Fragments', () => {
+	// 	expect(
+	// 		prettyRender(
+	// 			<div>
+	// 				<Fragment>
+	// 					<Fragment>
+	// 						<span />
+	// 					</Fragment>
+	// 				</Fragment>
+	// 			</div>
+	// 		)
+	// 	).to.equal(`<div>\n\t<span></span>\n</div>`);
+	// });
 
-	it('should not increase indentation with sibling Fragments', () => {
-		expect(
-			prettyRender(
-				<div>
-					<Fragment>
-						<div>A</div>
-					</Fragment>
-					<Fragment>
-						<div>B</div>
-					</Fragment>
-				</div>
-			)
-		).to.equal(`<div>\n\t<div>A</div>\n\t<div>B</div>\n</div>`);
-	});
+	// it('should not increase indentation with sibling Fragments', () => {
+	// 	expect(
+	// 		prettyRender(
+	// 			<div>
+	// 				<Fragment>
+	// 					<div>A</div>
+	// 				</Fragment>
+	// 				<Fragment>
+	// 					<div>B</div>
+	// 				</Fragment>
+	// 			</div>
+	// 		)
+	// 	).to.equal(`<div>\n\t<div>A</div>\n\t<div>B</div>\n</div>`);
+	// });
 
 	it('should join adjacent text nodes', () => {
 		// prettier-ignore
@@ -141,17 +140,17 @@ describe('pretty', () => {
 		`);
 	});
 
-	it('should join adjacent text nodeswith Fragments', () => {
-		// prettier-ignore
-		expect(prettyRender(
-			<div><Fragment>foo</Fragment>bar{' '} <b /></div>
-		)).to.equal(dedent`
-			<div>
-				foobar  
-				<b></b>
-			</div>
-		`);
-	});
+	// it('should join adjacent text nodeswith Fragments', () => {
+	// 	// prettier-ignore
+	// 	expect(prettyRender(
+	// 		<div><Fragment>foo</Fragment>bar{' '} <b /></div>
+	// 	)).to.equal(dedent`
+	// 		<div>
+	// 			foobar
+	// 			<b></b>
+	// 		</div>
+	// 	`);
+	// });
 
 	it('should collapse whitespace', () => {
 		expect(

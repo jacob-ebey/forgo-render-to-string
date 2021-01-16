@@ -1,4 +1,4 @@
-import { VNode } from 'preact';
+import type { ForgoNode } from 'forgo';
 
 interface Options {
 	jsx?: boolean;
@@ -9,5 +9,5 @@ interface Options {
 	pretty?: boolean | string;
 }
 
-export function render(vnode: VNode, context?: any, options?: Options): string;
+export function render(vnode: ForgoNode, options?: Options): string;
 export default render;

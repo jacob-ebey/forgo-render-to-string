@@ -1,5 +1,4 @@
 import render from '../src/jsx';
-import { h } from 'preact';
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
@@ -14,7 +13,7 @@ export function dedent([str]) {
 }
 
 describe('jsx', () => {
-	let renderJsx = (jsx, opts) => render(jsx, null, opts).replace(/ {2}/g, '\t');
+	let renderJsx = (jsx, opts) => render(jsx, opts).replace(/ {2}/g, '\t');
 
 	it('should render as JSX', () => {
 		let rendered = renderJsx(
@@ -110,8 +109,8 @@ describe('jsx', () => {
 	});
 
 	it('should render empty resolved children identically to no children', () => {
-		const Empty = () => null;
-		const False = () => false;
+		const Empty = () => ({ render: () => null });
+		const False = () => ({ render: () => false });
 		expect(
 			renderJsx(
 				<div>

@@ -1,24 +1,20 @@
-# preact-render-to-string
+# forgo-render-to-string
 
-[![NPM](http://img.shields.io/npm/v/preact-render-to-string.svg)](https://www.npmjs.com/package/preact-render-to-string)
-[![travis-ci](https://travis-ci.org/preactjs/preact-render-to-string.svg)](https://travis-ci.org/preactjs/preact-render-to-string)
+[![NPM](http://img.shields.io/npm/v/forgo-render-to-string.svg)](https://www.npmjs.com/package/forgo-render-to-string)
+[![travis-ci](https://travis-ci.org/jacob-ebey/forgo-render-to-string.svg)](https://travis-ci.org/jacob-ebey/forgo-render-to-string)
 
-Render JSX and [Preact] components to an HTML string.
+Render JSX and [Frogo] components to an HTML string.
 
 Works in Node & the browser, making it useful for universal/isomorphic rendering.
 
 \>\> **[Cute Fox-Related Demo](http://codepen.io/developit/pen/dYZqjE?editors=001)** _(@ CodePen)_ <<
 
-
 ---
-
 
 ### Render JSX/VDOM to HTML
 
 ```js
-import render from 'preact-render-to-string';
-import { h } from 'preact';
-/** @jsx h */
+import render from 'forgo-render-to-string';
 
 let vdom = <div class="foo">content</div>;
 
@@ -27,25 +23,18 @@ console.log(html);
 // <div class="foo">content</div>
 ```
 
-
-### Render Preact Components to HTML
+### Render Forgo Components to HTML
 
 ```js
-import render from 'preact-render-to-string';
-import { h, Component } from 'preact';
-/** @jsx h */
+import render from 'forgo-render-to-string';
 
-// Classical components work
-class Fox extends Component {
-	render({ name }) {
-		return <span class="fox">{ name }</span>;
-	}
-}
-
-// ... and so do pure functional components:
-const Box = ({ type, children }) => (
-	<div class={`box box-${type}`}>{ children }</div>
-);
+const Box = () => {
+	return {
+		render: ({ type, children }) => (
+			<div class={`box box-${type}`}>{children}</div>
+		)
+	};
+};
 
 let html = render(
 	<Box type="open">
@@ -57,25 +46,25 @@ console.log(html);
 // <div class="box box-open"><span class="fox">Finn</span></div>
 ```
 
-
 ---
 
-
-### Render JSX / Preact / Whatever via Express!
+### Render JSX / Forgo / Whatever via Express!
 
 ```js
 import express from 'express';
-import { h } from 'preact';
-import render from 'preact-render-to-string';
-/** @jsx h */
+import render from 'forgo-render-to-string';
 
 // silly example component:
-const Fox = ({ name }) => (
-	<div class="fox">
-		<h5>{ name }</h5>
-		<p>This page is all about {name}.</p>
-	</div>
-);
+const Fox = () => {
+	return {
+		render: ({ name }) => (
+			<div class="fox">
+				<h5>{name}</h5>
+				<p>This page is all about {name}.</p>
+			</div>
+		)
+	};
+};
 
 // basic HTTP server via express:
 const app = express();
@@ -89,14 +78,11 @@ app.get('/:fox', (req, res) => {
 });
 ```
 
-
 ---
-
 
 ### License
 
 [MIT]
 
-
-[Preact]: https://github.com/developit/preact
-[MIT]: http://choosealicense.com/licenses/mit/
+[forgo]: https://github.com/forgojs/forgo
+[mit]: http://choosealicense.com/licenses/mit/
