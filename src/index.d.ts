@@ -4,6 +4,7 @@ interface Options {
 	shallow?: boolean;
 	xml?: boolean;
 	pretty?: boolean | string;
+	onError?: (error: any) => void;
 }
 
 export function render(vnode: ForgoNode, options?: Options): string;

@@ -43,7 +43,7 @@ function renderToString(vnode, opts) {
 }
 
 /** The default export is an alias of `render()`. */
-function _renderToString(vnode, opts, inner, isSvgMode, selectValue) {
+function _renderToString(vnode, opts, inner, isSvgMode, selectValue, boundary) {
 	if (vnode == null || typeof vnode === 'boolean') {
 		return '';
 	}
@@ -94,15 +94,37 @@ function _renderToString(vnode, opts, inner, isSvgMode, selectValue) {
 			let rendered;
 
 			// stateless functional components
-			rendered = nodeName(props).render(props, {});
+			const component = nodeName(props);
+			try {
+				rendered = component.render(props, {});
 
-			return _renderToString(
-				rendered,
-				opts,
-				opts.shallowHighOrder !== false,
-				isSvgMode,
-				selectValue
-			);
+				const newBoundary = component.error ? component : boundary;
+
+				return _renderToString(
+					rendered,
+					opts,
+					opts.shallowHighOrder !== false,
+					isSvgMode,
+					selectValue,
+					newBoundary
+				);
+			} catch (error) {
+				if (opts.onError) {
+					opts.onError(error);
+				}
+
+				if (boundary && boundary.error) {
+					rendered = opts.boundary.error(props, { error });
+				}
+
+				return _renderToString(
+					rendered,
+					opts,
+					opts.shallowHighOrder !== false,
+					isSvgMode,
+					selectValue
+				);
+			}
 		}
 	}
 
@@ -234,7 +256,14 @@ function _renderToString(vnode, opts, inner, isSvgMode, selectValue) {
 							: nodeName === 'foreignObject'
 							? false
 							: isSvgMode,
-					ret = _renderToString(child, opts, true, childSvgMode, selectValue);
+					ret = _renderToString(
+						child,
+						opts,
+						true,
+						childSvgMode,
+						selectValue,
+						boundary
+					);
 
 				if (pretty && !hasLarge && isLargeString(ret)) hasLarge = true;
 
