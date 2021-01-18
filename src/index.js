@@ -95,10 +95,9 @@ function _renderToString(vnode, opts, inner, isSvgMode, selectValue, boundary) {
 
 			// stateless functional components
 			const component = nodeName(props);
+			boundary = component.error ? { component, props } : boundary;
 			try {
 				rendered = component.render(props, {});
-
-				const newBoundary = component.error ? component : boundary;
 
 				return _renderToString(
 					rendered,
@@ -106,24 +105,26 @@ function _renderToString(vnode, opts, inner, isSvgMode, selectValue, boundary) {
 					opts.shallowHighOrder !== false,
 					isSvgMode,
 					selectValue,
-					newBoundary
+					boundary
 				);
 			} catch (error) {
 				if (opts.onError) {
 					opts.onError(error);
 				}
 
-				if (boundary && boundary.error) {
-					rendered = opts.boundary.error(props, { error });
+				if (boundary && boundary.component && boundary.component.error) {
+					rendered = boundary.component.error(boundary.props, { error });
+
+					return _renderToString(
+						rendered,
+						opts,
+						opts.shallowHighOrder !== false,
+						isSvgMode,
+						selectValue
+					);
 				}
 
-				return _renderToString(
-					rendered,
-					opts,
-					opts.shallowHighOrder !== false,
-					isSvgMode,
-					selectValue
-				);
+				throw error;
 			}
 		}
 	}
